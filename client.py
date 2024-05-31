@@ -2,7 +2,6 @@ import asyncio
 import socket
 import threading
 from aiortc import RTCPeerConnection
-from aiortc.sdp import candidate_from_sdp
 import requests
 import time
 
@@ -155,7 +154,8 @@ class Peer:
                 host, port = message.split()[1].decode().split(":")
                 if (host, port) not in [(p.getsockname()[0], p.getsockname()[1]) for p in self.peers]:
                     self.connect_to_peer(host, int(port))
-
+                    break
+                    
 if __name__ == "__main__":
     host = socket.gethostbyname(socket.gethostname())
     port = 12345
