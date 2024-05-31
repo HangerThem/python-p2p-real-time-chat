@@ -1,7 +1,7 @@
 import asyncio
 import socket
 import threading
-from aiortc import RTCIceCandidate, RTCIceServer, RTCPeerConnection
+from aiortc import RTCPeerConnection
 from aiortc.sdp import candidate_from_sdp
 import requests
 import time
@@ -53,7 +53,7 @@ class Peer:
                 self.peers.append(client_socket)
                 threading.Thread(target=self.handle_client, args=(client_socket,)).start()
             except OSError:
-                break  # Exit the loop if the socket is closed
+                break
 
     def connect_to_peer(self, host, port):
         print(f"Connecting to {host}:{port}")
@@ -86,7 +86,6 @@ class Peer:
             except:
                 break
 
-        # Connection to the peer has been lost
         self.peers.remove(client_socket)
         client_socket.close()
 
@@ -145,7 +144,7 @@ class Peer:
         broadcast_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         while True:
             broadcast_socket.sendto(f"PEER {self.host}:{self.port}".encode(), ('<broadcast>', self.port))
-            time.sleep(5)  # Delay between broadcasts
+            time.sleep(5)
 
     def listen_for_broadcasts(self):
         broadcast_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
